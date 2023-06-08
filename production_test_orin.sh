@@ -5,6 +5,9 @@ if [ "$(whoami)" != "root" ] ; then
 	exit 1
 fi
 
+# Check the board revision
+BOARD_REV_1_1=true
+
 # Check the scipts' folder
 SCRIPTS_FOLDER=${PWD}
 if [ $# -eq 1 ]; then
@@ -89,13 +92,17 @@ function test_menu {
 		echo "8) M.2 Key-E Test" 
 		echo "9) RS-232 Test"
 		echo "10) RS-422 Test"
-		echo "11) CAN Bus (Transmit) Test"
-		echo "12) CAN Bus (Receive) Test"
-		echo "13) Digital Out Test"
-		echo "14) Digital In-0 Test"
-		echo "15) Digital In-1 Test"
-		echo "16) Power LED Test"
-		echo "17) Temperature Sensor Test"
+		if $BOARD_REV_1_1; then
+			echo "11) RS-485 Write Test"
+			echo "12) RS-485 Read Test"
+		fi
+		echo "13) CAN Bus (Transmit) Test"
+		echo "14) CAN Bus (Receive) Test"
+		echo "15) Digital Out Test"
+		echo "16) Digital In-0 Test"
+		echo "17) Digital In-1 Test"
+		echo "18) Power LED Test"
+		echo "19) Temperature Sensor Test"
 		read -p "Type the test number (or quit) [1/.../q]: " choice
 		echo ""
 
@@ -158,38 +165,48 @@ function test_menu {
 			9 )
 				echo "RS232 Test"
 				check_nvgetty_service
-				sudo gnome-terminal -- sudo gtkterm -p /dev/ttyTHS1 -s 115200
+				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs232_orin.sh $BOARD_REV_1_1
 				;;
 			10 )
 				echo "RS422 Test"
 				check_nvgetty_service
-				sudo gnome-terminal -- sudo gtkterm -p /dev/ttyTHS0 -s 115200
+				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs422_orin.sh $BOARD_REV_1_1
 				;;
 			11 )
+				echo "RS485 Write Test"
+				check_nvgetty_service
+				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs485_write_orin.sh $BOARD_REV_1_1
+				;;
+			12 )
+				echo "RS485 Read Test"
+				check_nvgetty_service
+				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs485_read_orin.sh $BOARD_REV_1_1
+				;;
+			13 )
 				echo "CANBus Transmit Test"
 				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_can_transmit_orin.sh
 				;;
-			12 )
+			14 )
 				echo "CANBus Receive Test"
 				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_can_receive_orin.sh
 				;;
-			13 )
+			15 )
 				echo "Digital Out Test"
 				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_digital_out_multi_orin.sh
 				;;
-			14 )
+			16 )
 				echo "Digital In-0 Test"
 				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_digital_in0_orin.sh
 				;;
-			15 )
+			17 )
 				echo "Digital In-1 Test"
 				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_digital_in1_orin.sh
 				;;
-			16 )
+			18 )
 				echo "Power LED Test"
 				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_power_led_orin.sh
 				;;
-			17 )
+			19 )
 				echo "Temperature Sensor Test"
 				if [ -d "/sys/bus/i2c/devices/0-0049" ]; then
 					gnome-terminal -- watch -n 0.1 cat /sys/bus/i2c/devices/0-0049/hwmon/hwmon*/temp1_input

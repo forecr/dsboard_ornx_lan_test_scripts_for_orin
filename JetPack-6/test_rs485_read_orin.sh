@@ -25,7 +25,7 @@ if $BOARD_REV_1_1; then
 	gpioset --mode=signal $RS422_232=$RS422_232_VAL &
 	PID_RS422_232=$!
 
-	sudo gtkterm -p /dev/ttyTHS0 -s 115200 -w RS485
+	sudo gtkterm -p /dev/ttyTHS3 -s 115200 -w RS485
 else
 	echo "RS485 test is compatible for Rev-1.1"
 	read -p 'Press [Enter] to exit' quit_key

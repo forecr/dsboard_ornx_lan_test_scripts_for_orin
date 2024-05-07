@@ -21,9 +21,9 @@ if $BOARD_REV_1_1; then
 	gpioset --mode=signal $RS422_232=$RS422_232_VAL &
 	PID_RS422_232=$!
 
-	sudo gtkterm -p /dev/ttyTHS0 -s 115200
+	sudo gtkterm -p /dev/ttyTHS3 -s 115200
 else
-	sudo gtkterm -p /dev/ttyTHS0 -s 115200
+	sudo gtkterm -p /dev/ttyTHS3 -s 115200
 fi
 
 trap interrupt_func INT

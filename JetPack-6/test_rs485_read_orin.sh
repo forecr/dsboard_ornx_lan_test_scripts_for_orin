@@ -31,12 +31,9 @@ else
 	read -p 'Press [Enter] to exit' quit_key
 fi
 
-trap interrupt_func INT
-interrupt_func() {
-	if $BOARD_REV_1_1; then
-		kill $PID_RS485_CTRL
-		kill $PID_RS422_232
-		kill $PID_HALF_FULL
-	fi
-}
+if $BOARD_REV_1_1; then
+	kill $PID_RS485_CTRL
+	kill $PID_RS422_232
+	kill $PID_HALF_FULL
+fi
 

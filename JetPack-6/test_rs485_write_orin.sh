@@ -4,7 +4,7 @@ if [ "$(whoami)" != "root" ] ; then
 	exit 1
 fi
 
-BOARD_REV_1_1=$1
+NEW_SERIAL_DESIGN=$1
 
 RS485_CTRL=`gpiofind "PCC.00"`
 RS485_CTRL_VAL=1
@@ -17,7 +17,7 @@ PID_RS485_CTRL=""
 PID_HALF_FULL=""
 PID_RS422_232=""
 
-if $BOARD_REV_1_1; then
+if $NEW_SERIAL_DESIGN; then
 	gpioset --mode=signal $RS485_CTRL=$RS485_CTRL_VAL &
 	PID_RS485_CTRL=$!
 	gpioset --mode=signal $HALF_FULL=$HALF_FULL_VAL &
@@ -31,7 +31,7 @@ else
 	read -p 'Press [Enter] to exit' quit_key
 fi
 
-if $BOARD_REV_1_1; then
+if $NEW_SERIAL_DESIGN; then
 	kill $PID_RS485_CTRL
 	kill $PID_RS422_232
 	kill $PID_HALF_FULL

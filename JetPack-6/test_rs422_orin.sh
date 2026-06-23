@@ -4,7 +4,7 @@ if [ "$(whoami)" != "root" ] ; then
 	exit 1
 fi
 
-BOARD_REV_1_1=$1
+NEW_SERIAL_DESIGN=$1
 
 HALF_FULL=`gpiofind "PCC.02"`
 HALF_FULL_VAL=0
@@ -14,7 +14,7 @@ RS422_232_VAL=1
 PID_HALF_FULL=""
 PID_RS422_232=""
 
-if $BOARD_REV_1_1; then
+if $NEW_SERIAL_DESIGN; then
 
 	gpioset --mode=signal $HALF_FULL=$HALF_FULL_VAL &
 	PID_HALF_FULL=$!
@@ -26,7 +26,7 @@ else
 	sudo gtkterm -p /dev/ttyTHS1 -s 115200
 fi
 
-if $BOARD_REV_1_1; then
+if $NEW_SERIAL_DESIGN; then
 	kill $PID_RS422_232
 	kill $PID_HALF_FULL
 fi

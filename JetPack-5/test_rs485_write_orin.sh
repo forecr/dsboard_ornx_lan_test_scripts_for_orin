@@ -4,7 +4,7 @@ if [ "$(whoami)" != "root" ] ; then
 	exit 1
 fi
 
-BOARD_REV_1_1=$1
+NEW_SERIAL_DESIGN=$1
 
 RS485_CTRL_NUM=328
 RS485_CTRL=PCC.00
@@ -16,7 +16,7 @@ RS422_232_NUM=389
 RS422_232=PG.06
 RS422_232_VAL=1
 
-if $BOARD_REV_1_1; then
+if $NEW_SERIAL_DESIGN; then
 	sudo echo $RS485_CTRL_NUM > /sys/class/gpio/export 
 	sudo echo $HALF_FULL_NUM > /sys/class/gpio/export 
 	sudo echo $RS422_232_NUM > /sys/class/gpio/export 
@@ -35,7 +35,7 @@ else
 	read -p 'Press [Enter] to exit' quit_key
 fi
 
-if $BOARD_REV_1_1; then
+if $NEW_SERIAL_DESIGN; then
 	sudo echo $RS485_CTRL_NUM > /sys/class/gpio/unexport
 	sudo echo $HALF_FULL_NUM > /sys/class/gpio/unexport
 	sudo echo $RS422_232_NUM > /sys/class/gpio/unexport

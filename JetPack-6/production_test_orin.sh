@@ -6,7 +6,7 @@ if [ "$(whoami)" != "root" ] ; then
 fi
 
 # Check the board revision
-BOARD_REV_1_1=true
+NEW_SERIAL_DESIGN=true # for using rev-1.1 or new
 
 # Check the scipts' folder
 SCRIPTS_FOLDER=$(dirname $(realpath $0))
@@ -87,7 +87,7 @@ apt_install_pkg 'nvidia-l4t-gstreamer'
 
 function check_nvgetty_service {
 	echo -n "nvgetty.service status: "
-	if [ "$(systemctl is-enabled nvgetty.service)" = "enabled" ]; then 
+	if [ "$(systemctl is-enabled nvgetty.service)" = "enabled" ]; then
 		echo "enabled"
 		sleep 2
 		sudo systemctl disable nvgetty.service
@@ -96,7 +96,7 @@ function check_nvgetty_service {
 		sudo reboot
 	elif [ "$(systemctl is-enabled nvgetty.service)" = "disabled" ]; then
 		echo "disabled"
-	else 
+	else
 		echo "Failed to get unit file state -> No such file or directory"
 		echo "Skipping..."
 	fi
@@ -118,10 +118,10 @@ function test_menu {
 		echo "5) Public Network Test (ping)"
 		echo "6) USB Test"
 		echo "7) CSI Test"
-		echo "8) M.2 Key-E Test" 
+		echo "8) M.2 Key-E Test"
 		echo "9) RS-232 Test"
 		echo "10) RS-422 Test"
-		if $BOARD_REV_1_1; then
+		if $NEW_SERIAL_DESIGN; then
 			echo "11) RS-485 Write Test"
 			echo "12) RS-485 Read Test"
 		fi
@@ -196,22 +196,22 @@ function test_menu {
 			9 )
 				echo "RS232 Test"
 				check_nvgetty_service
-				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs232_orin.sh $BOARD_REV_1_1
+				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs232_orin.sh $NEW_SERIAL_DESIGN
 				;;
 			10 )
 				echo "RS422 Test"
 				check_nvgetty_service
-				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs422_orin.sh $BOARD_REV_1_1
+				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs422_orin.sh $NEW_SERIAL_DESIGN
 				;;
 			11 )
 				echo "RS485 Write Test"
 				check_nvgetty_service
-				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs485_write_orin.sh $BOARD_REV_1_1
+				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs485_write_orin.sh $NEW_SERIAL_DESIGN
 				;;
 			12 )
 				echo "RS485 Read Test"
 				check_nvgetty_service
-				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs485_read_orin.sh $BOARD_REV_1_1
+				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_rs485_read_orin.sh $NEW_SERIAL_DESIGN
 				;;
 			13 )
 				echo "CANBus Transmit Test"

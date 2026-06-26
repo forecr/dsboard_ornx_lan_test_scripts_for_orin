@@ -7,6 +7,7 @@ fi
 
 # Check the board revision
 NEW_SERIAL_DESIGN=true # for using rev-1.1 or new
+NEW_TEMP_SENSOR=true # for using rev-2.0 or new
 
 # Check the scipts' folder
 SCRIPTS_FOLDER=$(dirname $(realpath $0))
@@ -131,7 +132,11 @@ function test_menu {
 		echo "16) Digital In-0 Test"
 		echo "17) Digital In-1 Test"
 		echo "18) Power LED Test"
-		echo "19) Temperature Sensor Test"
+		if $NEW_TEMP_SENSOR; then
+			echo "19) 6-AXIS IMU & Temperature Sensor Test"
+		else
+			echo "19) Temperature Sensor Test"
+		fi
 		echo "20) Fan Test"
 		read -p "Type the test number (or quit) [1/.../q]: " choice
 		echo ""
@@ -238,8 +243,13 @@ function test_menu {
 				sudo gnome-terminal -- $SCRIPTS_FOLDER/test_power_led_orin.sh
 				;;
 			19 )
-				echo "Temperature Sensor Test"
-				sudo gnome-terminal -- watch -n 0.1 sensors tmp102-*
+				if $NEW_TEMP_SENSOR; then
+					echo "6-AXIS IMU & Temperature Sensor Test"
+					sudo gnome-terminal -- $SCRIPTS_FOLDER/test_wsen_isds_imu.sh -i 0.1
+				else
+					echo "Temperature Sensor Test"
+					sudo gnome-terminal -- watch -n 0.1 sensors tmp102-*
+				fi
 				;;
 			20 )
 				echo "Fan Test"
